@@ -169,8 +169,15 @@ def seq2seq(units: int, n_layers: int, shape: Tuple[int, int]) -> Tuple[Any, Any
 def fit(train_gen, val_gen, epochs) -> Any:
     earlystop = tf.keras.callbacks.EarlyStopping(
         monitor='val_loss', patience=5, restore_best_weights=True)
+    checkpoint = tf.keras.callbacks.ModelCheckpoint(
+        './checkpoint.hdf5',
+        onitor='val_ade', 
+        save_best_only=True)
     history = model.fit(
-        train_gen, validation_data=val_gen, epochs=epochs, callbacks=[earlystop])
+        train_gen, 
+        validation_data=val_gen, 
+        epochs=epochs, 
+        callbacks=[earlystop, checkpoint])
     return history
 
 def embed(encoder: Any, data_gen: Any) -> np.ndarray:
@@ -224,4 +231,6 @@ if __name__ == '__main__':
     score = model.evaluate(test_gen)
 
     embeddings = embed(encoder, test_gen)
+    np.save('embeddings.npy', embeddings)
     labels = cluster(embeddings, 10)
+    np.save('labels.npy', labels)
