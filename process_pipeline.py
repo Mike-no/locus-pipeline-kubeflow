@@ -20,22 +20,23 @@ def process_dataframe(filename: str, features: List[str]) -> List[np.ndarray]:
     data = pd.read_csv(filename, sep=',')
     data.columns=['uid', 'datetime', 'lat', 'lon', 'mode', 'factor']
     groups = [df for _, df in tqdm(data.groupby('uid'), desc=f'grouping dataset')]
-    arrays = []
-    arrays += [df[features].to_numpy() for df in tqdm(groups, desc='generating numpy samples')]
+    arrays = [df[features].to_numpy() for df in tqdm(groups, desc='generating numpy samples')]
     return arrays
 
 def filter_samples(data: List[np.ndarray], size: int, seqlen: int) -> np.ndarray:
     """
-    Process data to #size random trajectories, all to the same fixed lengths.
-    Basically this is just to manage to represent the whol data in a np array.
+    Filter data to sequences of length `seqlen`.
+    Select `size` random trajectories if `size` is positive.
+    Basically this function makes it possible to store all data in an ndarray.
+    TODO: Properly handle truncation of long series to seqlen.
 
     Args:
         data (List[np.ndarray]): list of original trajectories
         size (int): number of trajectories to keep
-        length (int): series length
+        seqlen (int): series length
 
     Returns:
-        np.ndarray: consolidated array of #size trajectories of length #seqlen
+        np.ndarray: consolidated array of `size` trajectories of length #seqlen
     """
     data = list(filter(lambda d: len(d)>=seqlen, tqdm(data)))
     data = list(map(lambda d: d[:seqlen], data))
