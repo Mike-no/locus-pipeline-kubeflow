@@ -212,7 +212,7 @@ def cluster(data: np.ndarray, max_clusters: int) -> np.ndarray:
 
 #%%
 if __name__ == '__main__':
-    filename = 'e1.csv'
+    filename = 'e1.pq'
     data = process_dataframe(filename, ['lat', 'lon'])
 
     seqlen = int(np.mean([len(d) for d in data]))
