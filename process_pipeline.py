@@ -3,6 +3,7 @@ from typing import List, Any, Tuple
 import tensorflow as tf
 import numpy as np
 from tqdm import tqdm
+from joblib import dump
 #%%
 def process_dataframe(filename: str, features: List[str]) -> List[np.ndarray]:
     """
@@ -208,11 +209,12 @@ def cluster(data: np.ndarray, max_clusters: int) -> np.ndarray:
     n = kn.knee
     model = kmeans[n-1]
     y_kmeans = model.predict(data)
-    return y_kmeans
+
+    return y_kmeans, model
 
 #%%
 if __name__ == '__main__':
-    filename = 'e1.pq'
+    filename = 'e1.csv'
     data = process_dataframe(filename, ['lat', 'lon'])
 
     seqlen = int(np.mean([len(d) for d in data]))
@@ -227,11 +229,15 @@ if __name__ == '__main__':
     model, encoder = seq2seq(8, 4, (60, 2))
     model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mse')
 
-    history = fit(train_gen, val_gen, 1000)
+    history = fit(train_gen, val_gen, 1)
 
     score = model.evaluate(test_gen)
 
     embeddings = embed(encoder, test_gen)
     np.save('embeddings.npy', embeddings)
-    labels = cluster(embeddings, 10)
+    labels, clustering_model = cluster(embeddings, 10)
     np.save('labels.npy', labels)
+
+    # Save the models
+    encoder.save("./locusencoder")
+    dump(clustering_model, "./model.joblib")

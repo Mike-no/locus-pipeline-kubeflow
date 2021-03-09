@@ -1,0 +1,5 @@
+*.joblib
+*.npy
+*.hdf5
+locusencoder/
+*.tar.gz
