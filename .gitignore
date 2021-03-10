@@ -1,5 +1,6 @@
 *.joblib
 *.npy
+*.npz
 *.hdf5
 locusencoder/
 *.tar.gz

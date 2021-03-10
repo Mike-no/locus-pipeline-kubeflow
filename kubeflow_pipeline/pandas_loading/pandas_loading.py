@@ -42,4 +42,4 @@ if __name__ == '__main__':
     print(file_path)
 
     data = process_dataframe(file_path, ['lat', 'lon'])
-    np.save('/processed_data.npy', data)
+    np.savez('/data.npz', *data)
