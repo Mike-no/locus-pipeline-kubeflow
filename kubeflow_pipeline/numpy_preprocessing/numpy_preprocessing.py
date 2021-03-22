@@ -1,8 +1,10 @@
 import numpy as np
 import argparse
 import sys
+import os
 from typing import List, Any, Tuple
 from tqdm import tqdm
+from pathlib import Path
 
 def filter_samples(data: List[np.ndarray], size: int, seqlen: int) -> np.ndarray:
     """
@@ -81,23 +83,27 @@ def shuffle_trajectories(data: np.ndarray) -> np.ndarray:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--Filename', help = ".npy file to be pre-processed")
+    parser.add_argument('--Input', type = str, help = "Path of the .npz file to be pre-processed")
+    parser.add_argument('--Output', type = str, help = "Path of the local file where rhe pre-processed data should be written.")
     args = parser.parse_args()
 
-    if len(sys.argv) == 1:
+    if len(sys.argv) != 5:
         parser.print_help(sys.stderr)
         sys.exit(1)
 
-    if args.Filename:
-        loaded_data = np.load(args.Filename)
-        data = []
-        for f in loaded_data.files:
-            data.append(loaded_data[f])
+    Path(args.Output).parent.mkdir(parents = True, exist_ok = True)
 
-        seqlen = int(np.mean([len(d) for d in data]))
-        data = filter_samples(data, size = 500, seqlen = seqlen)
-        data = transform_coordinates(data)
-        data, scaler = scale_data(data)
-        data = shuffle_trajectories(data)
+    loaded_data = np.load(args.Input)
+    data = []
+    for f in loaded_data.files:
+        data.append(loaded_data[f])
 
-        np.save('/preprocessed_data.npy', data)
+    seqlen = int(np.mean([len(d) for d in data]))
+    data = filter_samples(data, size = 500, seqlen = seqlen)
+    data = transform_coordinates(data)
+    data, scaler = scale_data(data)
+    data = shuffle_trajectories(data)
+
+    np.save(args.Output, data)
+
+    os.rename(args.Output + '.npy', args.Output)

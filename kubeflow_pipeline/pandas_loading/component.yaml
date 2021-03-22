@@ -1,0 +1,14 @@
+name: Pandas Loading
+description: Load data from .csv and process it
+inputs:
+  - { name: input_path }
+outputs:
+  - { name: output_path }
+implementation:
+  container:
+    image: docker.io/mikeno/pandas_loading:latest
+    command: [ 
+      python3, /pandas_loading.py,
+      --Input, { inputPath: input_path },
+      --Output, { outputPath: output_path }
+    ]

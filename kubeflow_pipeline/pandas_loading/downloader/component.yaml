@@ -1,0 +1,14 @@
+name: Downloader
+description: Download data from URL
+inputs:
+  - { name: url }
+outputs:
+  - { name: output_path }
+implementation:
+  container:
+    image: docker.io/mikeno/downloader:latest
+    command: [ 
+      python3, /downloader.py,
+      --Input, { inputValue: url },
+      --Output, { outputPath: output_path }
+    ]

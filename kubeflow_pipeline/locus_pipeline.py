@@ -1,31 +1,20 @@
+import os
 import kfp
-from kfp import dsl
 
-def pandas_loading_op(file_path):
-    return dsl.ContainerOp(
-        name = 'Pandas Loading',
-        image = 'docker.io/mikeno/pandas_loading:latest',
-        command = [ 'python3', '/pandas_loading.py' ],
-        arguments = [ '-f', file_path ],
-        file_outputs = { 'output': '/data.npz' }
-    )
+# Components 
+downloader_op = kfp.components.load_component_from_file(os.path.join('./pandas_loading/downloader/', 'component.yaml'))
+pandas_loading_op = kfp.components.load_component_from_file(os.path.join('./pandas_loading/', 'component.yaml'))
+numpy_preprocessing_op = kfp.components.load_component_from_file(os.path.join('./numpy_preprocessing/', 'component.yaml'))
 
-def numpy_preprocessing_op(file_path):
-    return dsl.ContainerOp(
-        name = 'Numpy Preprocessing',
-        image = 'docker.io/mikeno/numpy_preprocessing:latest',
-        command = [ 'python3', '/numpy_preprocessing.py' ],
-        arguments = [ '-f', file_path ],
-        file_outputs = { 'output': '/preprocessed_data.npy' }
-    )
-
-@dsl.pipeline(name = 'Locus Pipeline', description = 'Locus Pipeline Encoder + Clustering')
-def locus_pipeline(file_path):
-    pandas_loading = pandas_loading_op(file_path)
-
-    data = dsl.InputArgumentPath(pandas_loading.output)
-    numpy_preprocessing = numpy_preprocessing_op(data)
+@kfp.dsl.pipeline(
+    name = 'Pandas Pipeline',
+    description = 'Locus Pipeline (Pandas Loading)'
+)
+def pandas_pipeline(data_url):
+    downloader = downloader_op(url = data_url)
+    pandas_loading = pandas_loading_op(input_path = downloader.output)
+    numpy_preprocessing = numpy_preprocessing_op(input_path = pandas_loading.output)
 
 if __name__ == '__main__':
     import kfp.compiler as compiler
-    compiler.Compiler().compile(locus_pipeline, __file__ + '.tar.gz')
+    compiler.Compiler().compile(pandas_pipeline, __file__ + '.tar.gz')

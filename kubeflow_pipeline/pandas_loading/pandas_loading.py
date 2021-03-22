@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 import argparse
 import sys
+import os
 from typing import List
 from tqdm import tqdm
+from pathlib import Path
 
 def process_dataframe(filename: str, features: List[str]) -> List[np.ndarray]:
     
@@ -28,18 +30,17 @@ def process_dataframe(filename: str, features: List[str]) -> List[np.ndarray]:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--Filename', help = ".csv file to be loaded and processed")
+    parser.add_argument('--Input', type = str, help = "Path of the local .csv file to be loaded and processed.")
+    parser.add_argument('--Output', type = str, help = "Path of the local file where the processed data should be written.")
     args = parser.parse_args()
 
-    if len(sys.argv) == 1:
+    if len(sys.argv) != 5:
         parser.print_help(sys.stderr)
         sys.exit(1)
 
-    file_path = args.Filename
-    if not file_path:
-        file_path = 'e1.csv'
+    Path(args.Output).parent.mkdir(parents = True, exist_ok = True)
 
-    print(file_path)
+    data = process_dataframe(args.Input, ['lat', 'lon'])
+    np.savez(args.Output, *data)
 
-    data = process_dataframe(file_path, ['lat', 'lon'])
-    np.savez('/data.npz', *data)
+    os.rename(args.Output + '.npz', args.Output)
