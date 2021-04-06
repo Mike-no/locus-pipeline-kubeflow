@@ -1,0 +1,23 @@
+apiVersion: machinelearning.seldon.io/v1alpha2
+kind: SeldonDeployment
+metadata:
+  name: locus-clustering
+  namespace: models
+spec:
+  name: locus-clustering
+  predictors:
+  - componentSpecs:
+    - spec:
+        containers:
+        - image: clustering:latest
+          name: clustering
+          imagePullPolicy: IfNotPresent
+    graph:
+      name: clustering
+      endpoint:
+        type: REST
+      type: MODEL
+      children: []
+    name: default
+    replicas: 1
+    

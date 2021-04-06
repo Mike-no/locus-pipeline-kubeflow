@@ -1,0 +1,24 @@
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  name: locus-graph
+  namespace: models
+spec:
+  name: locus-graph
+  predictors:
+  - componentSpecs:
+    - spec:
+        containers:
+        - image: clustering
+          name: clustering
+          imagePullPolicy: IfNotPresent
+    graph:
+      name: encoder
+      implementation: TENSORFLOW_SERVER
+      envSecretRefName: seldon-init-container-secret-minio
+      modelUri: s3://locus-bucket/locusencoder
+      children:
+        - name: clustering
+          type: MODEL
+    name: default
+    replicas: 1

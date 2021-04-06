@@ -1,6 +1,6 @@
-*.joblib
+./*.joblib
 *.npy
 *.npz
 *.hdf5
-locusencoder/
+./locusencoder/
 *.tar.gz
