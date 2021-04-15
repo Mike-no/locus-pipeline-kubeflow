@@ -1,0 +1,14 @@
+name: Kmeans Clustering
+description: Take the output data from the Tensorflow Training Component and Train a clustering model
+inputs:
+  - { name: input_path }
+outputs:
+  - { name: output_path }
+implementation:
+  container:
+    image: docker.io/mikeno/kmeans_clustering:latest
+    command: [ 
+      python3, /kmeans_clustering.py,
+      --Input, { inputPath: input_path },
+      --Output, { outputPath: output_path }
+    ]
