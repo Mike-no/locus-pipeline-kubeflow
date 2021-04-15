@@ -1,0 +1,16 @@
+name: Tensorflow Training
+description: Take the output data from the Numpy Preprocessing Component and Train an encoder model
+inputs:
+  - { name: input_path }
+outputs:
+  - { name: output_path }
+  - { name: output_path2 }
+implementation:
+  container:
+    image: docker.io/mikeno/tensorflow_training:latest
+    command: [ 
+      python3, /tensorflow_training.py,
+      --Input, { inputPath: input_path },
+      --Output, { outputPath: output_path },
+      --Output2, { outputPath: output_path2 }
+    ]
