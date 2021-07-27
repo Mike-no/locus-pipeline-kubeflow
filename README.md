@@ -11,3 +11,4 @@ To run the Locus Pipeline to generate the .tar.gz that can be imported in Kubefl
 cd kubeflow_pipeline
 python3 locus_pipeline.py
 ```
+The ```clustering_wrapper```, ```encoder``` and ```graph``` directories contains the files needed to deploy the models using seldon.
