@@ -1,4 +1,4 @@
-# ML Pipeline using a seq2seq model and openpflow data running on kubeflow
+# Locus: ML Pipeline using a seq2seq model and openpflow data running on kubeflow
 ![Seq2Seq openpflow pipeline](img/seq2seq_pipeline.png)
 
 ## Usage
