@@ -1,0 +1,23 @@
+apiVersion: machinelearning.seldon.io/v1alpha2
+kind: SeldonDeployment
+metadata:
+  name: locus-encoder
+  namespace: models
+spec:
+  name: locus-encoder
+  predictors:
+  - graph:
+      children: []
+      implementation: TENSORFLOW_SERVER
+      envSecretRefName: seldon-init-container-secret-minio
+      modelUri: s3://locus-bucket/locusencoder
+      name: embeddings-locus
+      parameters:
+        - name: signature_name
+          type: STRING
+          value: serving_default
+        - name: model_name
+          type: STRING
+          value: embeddings-locus
+    name: default
+    replicas: 1
