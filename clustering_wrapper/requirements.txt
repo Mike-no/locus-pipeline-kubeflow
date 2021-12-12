@@ -3,3 +3,4 @@ scikit-learn == 0.23.2
 numpy >= 1.8.2
 joblib == 0.16.0
 seldon-core
+minio==7.1.1

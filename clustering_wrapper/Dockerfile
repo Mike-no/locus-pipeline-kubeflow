@@ -2,7 +2,6 @@ FROM python:3.7-slim
 
 COPY requirements.txt /clustering/requirements.txt
 COPY ClusteringModel.py /clustering/ClusteringModel.py
-COPY model.joblib /clustering/model.joblib
 
 WORKDIR /clustering
 

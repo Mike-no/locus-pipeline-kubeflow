@@ -3,8 +3,8 @@ import numpy as np
 import json
 import requests
 
-embeddings = np.load('embeddings.npy')
-clustering_model = load('model.joblib')
+embeddings = np.load('../embeddings.npy')
+clustering_model = load('../test/model.joblib')
 
 print(type(embeddings[0][0]))
 print(clustering_model.predict(embeddings))
@@ -19,3 +19,4 @@ print(type(loaded[0][0]))
 request_body = { 'data': { 'ndarray': to_predict } }
 
 response = requests.post('http://localhost:9000/api/v1.0/predictions', json = request_body)
+print(response.content)
