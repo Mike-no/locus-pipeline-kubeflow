@@ -9,9 +9,9 @@ spec:
   - componentSpecs:
     - spec:
         containers:
-        - image: clustering
+        - image: mikeno/clustering:latest
           name: clustering
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
     graph:
       name: encoder
       implementation: TENSORFLOW_SERVER
