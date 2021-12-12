@@ -70,6 +70,7 @@ if __name__ == '__main__':
         minio_filename = ""
         with open(args.Input5, 'r') as stream:
             deployment_dict = yaml.safe_load(stream)
-            minio_filename = deployment_dict["spec"]["predictors"][0]["componentSpecs"][0]["spec"]["containers"][0]["image"]
+            tmp = deployment_dict["spec"]["predictors"][0]["componentSpecs"][0]["spec"]["containers"][0]["image"]
+            minio_filename = tmp.split("/")[1].split(":")[0]
 
         upload_model_file(args.Input, args.Input2, args.Input3, args.Input4, minio_filename)
