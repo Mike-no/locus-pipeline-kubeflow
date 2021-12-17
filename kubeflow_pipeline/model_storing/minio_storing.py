@@ -27,7 +27,7 @@ def upload_model_folder(model, minio_url, minio_access_key, minio_secret_key, mi
 
     tmp = minio_path.split("/")
     minio_bucket = tmp[0]
-    minio_filename = tmp[1]
+    minio_filename = tmp[1] + "/1"
 
     found = client.bucket_exists(minio_bucket)
     if not found:
