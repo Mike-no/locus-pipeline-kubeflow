@@ -9,4 +9,8 @@ RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
+USER root
+RUN chmod 777 /clustering
+USER 8888
+
 CMD exec seldon-core-microservice ClusteringModel --service-type MODEL
