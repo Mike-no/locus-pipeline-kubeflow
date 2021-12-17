@@ -15,7 +15,7 @@ spec:
     graph:
       name: encoder
       implementation: TENSORFLOW_SERVER
-      envSecretRefName: seldon-init-container-secret-minio
+      envSecretRefName: seldon-init-container-secret
       modelUri: s3://locus-bucket/locusencoder
       children:
         - name: clustering
