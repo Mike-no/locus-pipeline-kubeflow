@@ -5,7 +5,7 @@ inputs:
   - { name: minio_url }
   - { name: minio_access_key }
   - { name: minio_secret_key }
-  - { name: graph_path }
+  - { name: minio_path }
 implementation:
   container:
     image: docker.io/mikeno/minio_storing:latest
@@ -15,5 +15,5 @@ implementation:
       --Input2, { inputValue: minio_url },
       --Input3, { inputValue: minio_access_key },
       --Input4, { inputValue: minio_secret_key },
-      --Input5, { inputPath: graph_path }
+      --Input5, { inputValue: minio_path }
     ]

@@ -60,17 +60,6 @@ if __name__ == '__main__':
         sys.exit(1)
 
     if os.path.isdir(args.Input):
-        minio_path = ""
-        with open(args.Input5, 'r') as stream:
-            deployment_dict = yaml.safe_load(stream)
-            minio_path = deployment_dict["spec"]["predictors"][0]["graph"]["modelUri"].split("s3://")[1]
-
-        upload_model_folder(args.Input, args.Input2, args.Input3, args.Input4, minio_path)
+        upload_model_folder(args.Input, args.Input2, args.Input3, args.Input4, args.Input5)
     else:
-        minio_filename = ""
-        with open(args.Input5, 'r') as stream:
-            deployment_dict = yaml.safe_load(stream)
-            tmp = deployment_dict["spec"]["predictors"][0]["componentSpecs"][0]["spec"]["containers"][0]["image"]
-            minio_filename = tmp.split("/")[1].split(":")[0]
-
-        upload_model_file(args.Input, args.Input2, args.Input3, args.Input4, minio_filename)
+        upload_model_file(args.Input, args.Input2, args.Input3, args.Input4, args.Input5)
