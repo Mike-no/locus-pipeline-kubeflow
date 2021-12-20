@@ -1,5 +1,6 @@
 import os
 import kfp
+import yaml
 
 # Components 
 downloader_op = kfp.components.load_component_from_file(os.path.join('./pandas_loading/downloader/', 'component.yaml'))
@@ -13,13 +14,15 @@ kmeans_clustering_op = kfp.components.load_component_from_file(os.path.join('./k
     name = 'Pandas Pipeline',
     description = 'Locus Pipeline (Pandas Loading)'
 )
-def pandas_pipeline(data_url, minio_url, minio_access_key, minio_secret_key, graph_url):
+def pandas_pipeline(data_url, minio_url, minio_access_key, minio_secret_key):
     
     # Download dataset
     downloader_dataset = downloader_op(url = data_url)
 
-    # Downlod graph deployment file
-    downloader_graph = downloader_op(url = graph_url)    
+    # Get graph deployment file and 
+    deployment_dict = yaml.safe_load(open('../graph/graph.yaml', 'r'))
+    minio_path = deployment_dict["spec"]["predictors"][0]["graph"]["modelUri"].split("s3://")[1]
+    minio_filename = deployment_dict["spec"]["predictors"][0]["componentSpecs"][0]["spec"]["containers"][0]["image"].split("/")[1].split(":")[0]
     
     # Preprocess and Train encoder model, produce embeddings
     pandas_loading = pandas_loading_op(input_path = downloader_dataset.output)
@@ -28,16 +31,21 @@ def pandas_pipeline(data_url, minio_url, minio_access_key, minio_secret_key, gra
     
     # Save encoder model in PV
     encoder_model_storing = model_storing_op(model_path = tensorflow_training.outputs['output_path'], minio_url = minio_url, 
-        minio_access_key = minio_access_key, minio_secret_key = minio_secret_key, graph_path = downloader_graph.output)
+        minio_access_key = minio_access_key, minio_secret_key = minio_secret_key, minio_path = minio_path)
     
     # Produce clustering model
     kmeans_clustering = kmeans_clustering_op(input_path = tensorflow_training.outputs['output_path2'])
     
     # Save clustering model in PV
     clustering_model_storing = model_storing_op(model_path = kmeans_clustering.output, minio_url = minio_url,
-        minio_access_key = minio_access_key, minio_secret_key = minio_secret_key, graph_path = downloader_graph.output)
+        minio_access_key = minio_access_key, minio_secret_key = minio_secret_key, minio_path = minio_filename)
 
-    # Start Seldon Deployment for encoder
+    # Start Graph Seldon Deployment
+    seldon_deploy = kfp.dsl.ResourceOp(
+        name = "Seldon Deploy",
+        k8s_resource = deployment_dict,
+        action = 'apply'
+    ).after(encoder_model_storing, clustering_model_storing)
 
 if __name__ == '__main__':
     import kfp.compiler as compiler
