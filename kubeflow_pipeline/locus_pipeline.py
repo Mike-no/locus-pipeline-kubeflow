@@ -11,10 +11,10 @@ model_storing_op = kfp.components.load_component_from_file(os.path.join('./model
 kmeans_clustering_op = kfp.components.load_component_from_file(os.path.join('./kmeans_clustering/', 'component.yaml'))
 
 @kfp.dsl.pipeline(
-    name = 'Pandas Pipeline',
-    description = 'Locus Pipeline (Pandas Loading)'
+    name = 'UC1 Functionality-1',
+    description = 'Locus Pipeline for UC1 Functionality-1'
 )
-def pandas_pipeline(data_url, minio_url, minio_access_key, minio_secret_key):
+def locus_pipeline(data_url, minio_url, minio_access_key, minio_secret_key):
     
     # Download dataset
     downloader_dataset = downloader_op(url = data_url)
@@ -49,4 +49,4 @@ def pandas_pipeline(data_url, minio_url, minio_access_key, minio_secret_key):
 
 if __name__ == '__main__':
     import kfp.compiler as compiler
-    compiler.Compiler().compile(pandas_pipeline, __file__ + '.tar.gz')
+    compiler.Compiler().compile(locus_pipeline, __file__ + '.tar.gz')
