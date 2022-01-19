@@ -5,3 +5,4 @@ pyproj==2.6.1.post1
 scikit-learn==0.23.2
 tensorflow==2.3.1
 tqdm==4.48.2
+pyarrow==6.0.1
