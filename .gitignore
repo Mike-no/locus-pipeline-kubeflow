@@ -1,6 +1,7 @@
 ./*.joblib
 *.npy
 *.npz
+!data/nodes.npz
 *.hdf5
 ./locusencoder/
 *.tar.gz
