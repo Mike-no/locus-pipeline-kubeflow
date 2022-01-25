@@ -1,0 +1,22 @@
+name: Data Loading
+description: Load data from various datasets
+inputs:
+  - { name: openpflow_trajectories_path }
+  - { name: nodes_npz_path }
+  - { name: tokyo_osmpbf_path }
+outputs:
+  - { name: openpflow_trajectories_output }
+  - { name: nodes_npz_output }
+  - { name: tokyo_osmpbf_output }  
+implementation:
+  container:
+    image: docker.io/mikeno/data_loading:latest
+    command: [
+      python3, /data_loading.py,
+      --Input, { inputPath: openpflow_trajectories_path },
+      --Input2, { inputPath: nodes_npz_path },
+      --Input3, { inputPath: tokyo_osmpbf_path },
+      --Output, { outputPath: openpflow_trajectories_output },
+      --Output2, { outputPath: nodes_npz_output },
+      --Output3, { outputPath: tokyo_osmpbf_output }
+    ]
