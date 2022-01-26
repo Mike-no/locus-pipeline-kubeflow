@@ -1,0 +1,22 @@
+name: Tensorflow Training
+description: Take the output data from the Numpy Preprocessing and Data Loading Components and Train an encoder model
+inputs:
+  - { name: prep_openpflow_trajectories_path }
+  - { name: nodes_npz_path }
+  - { name: tokyo_osmpbf_path }
+  - { name: tree_pkl_path }
+outputs:
+  - { name: encoder_output }
+  - { name: embeddings_output }
+implementation:
+  container:
+    image: docker.io/mikeno/tensorflow_training:latest
+    command: [ 
+      python3, /tensorflow_training.py,
+      --Input, { inputPath: prep_openpflow_trajectories_path },
+      --Input2, { inputPath: nodes_npz_path },
+      --Input3, { inputPath: tokyo_osmpbf_path },
+      --Input4, { inputPath: tree_pkl_path },
+      --Output, { outputPath: encoder_output },
+      --Output2, { outputPath: embeddings_output }
+    ]
