@@ -83,8 +83,8 @@ def shuffle_trajectories(data: np.ndarray) -> np.ndarray:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--Input', type = str, help = "Path of the .npz file to be pre-processed")
-    parser.add_argument('--Output', type = str, help = "Path of the local file where rhe pre-processed data should be written.")
+    parser.add_argument('--Input', type = str, help = "Path of the openpflow trajectories .npz file to be pre-processed")
+    parser.add_argument('--Output', type = str, help = "Path of the local file where the pre-processed data should be written.")
     args = parser.parse_args()
 
     if len(sys.argv) != 5:
