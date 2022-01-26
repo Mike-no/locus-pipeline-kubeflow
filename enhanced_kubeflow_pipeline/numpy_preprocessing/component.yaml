@@ -1,0 +1,14 @@
+name: Numpy Preprocessing
+description: Take the openpflow trajectories output data from the Data Loading Component and Preprocess it 
+inputs:
+  - { name: input_path }
+outputs:
+  - { name: output_path }
+implementation:
+  container:
+    image: docker.io/mikeno/numpy_preprocessing:latest
+    command: [ 
+      python3, /numpy_preprocessing.py,
+      --Input, { inputPath: input_path },
+      --Output, { outputPath: output_path }
+    ]
