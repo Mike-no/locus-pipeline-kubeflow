@@ -5,3 +5,4 @@
 *.hdf5
 ./locusencoder/
 *.tar.gz
+enhanced_kubeflow_pipeline/models_keeper/data/
