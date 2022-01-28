@@ -1,0 +1,17 @@
+name: Models Keeper
+description: Outputs models in order to be used by the Pipeline
+outputs:
+  - { name: openpflow_trajectories_output }
+  - { name: nodes_npz_output }
+  - { name: tokyo_osmpbf_output }
+  - { name: tree_pkl_output }
+implementation:
+  container:
+    image: docker.io/mikeno/models_keeper:latest
+    command: [
+      python3, /models_keeper.py,
+      --Output, { outputPath: openpflow_trajectories_output },
+      --Output2, { outputPath: nodes_npz_output },
+      --Output3, { outputPath: tokyo_osmpbf_output },
+      --Output4, { outputPath: tree_pkl_output }
+    ]
