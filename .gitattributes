@@ -1,3 +1,0 @@
-data/tokyo_osmpbf.ft filter=lfs diff=lfs merge=lfs -text
-data/nodes.npz filter=lfs diff=lfs merge=lfs -text
-data/tree.pkl filter=lfs diff=lfs merge=lfs -text
