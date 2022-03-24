@@ -8,3 +8,6 @@
 enhanced_kubeflow_pipeline/models_keeper/data/
 graph/testdata.tfrecord
 data/
+e1.csv
+test/
+clustering_wrapper/test.py
