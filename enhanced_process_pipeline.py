@@ -231,6 +231,11 @@ if __name__ == '__main__':
     lookback = 60
     batch_size = 32
     data = process_dataframe(filename, ['lat', 'lon'])
+
+    print(type(data))
+    print(type(data[0]))
+    exit()
+
     with open('./data/nodes.npz', 'rb') as f:
         nodes = np.load(f)['nodes']
     embeds = pd.read_feather('./data/tokyo_osmpbf.ft')
