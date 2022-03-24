@@ -11,3 +11,4 @@ data/
 e1.csv
 test/
 clustering_wrapper/test.py
+kubeflow_pipeline/pandas_loading/e1.csv
