@@ -6,7 +6,7 @@ from minio.error import S3Error
 class ClusteringModel:
 
 	def __init__(self):
-		client = Minio('10.30.8.38:30745', 'minioadmin', 'minioadmin', secure = False)
+		client = Minio('10.30.5.20:30225', 'minioadmin', 'minioadmin', secure = False)
 		try:
 			response = client.get_object("clustering", "clustering.joblib")
 			with open('clustering.joblib', 'wb') as fd:
